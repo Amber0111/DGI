@@ -6,8 +6,8 @@ import torch.nn as nn
 from models import DGI, LogReg
 from utils import process
 
+# 参数预设
 dataset = 'cora'
-
 # training params
 batch_size = 1
 nb_epochs = 10000
@@ -19,6 +19,15 @@ hid_units = 512
 sparse = True
 nonlinearity = 'prelu'  # special name to separate parameters
 
+"""
+加载数据 
+adj (2708,2708)
+features (2708,1433)
+labels (2708,7)
+idx_train range(0,140)
+idx_val range(140,640)
+idx_test range(1708,2708)
+"""
 adj, features, labels, idx_train, idx_val, idx_test = process.load_data(dataset)
 features, _ = process.preprocess_features(features)
 
@@ -41,6 +50,7 @@ idx_train = torch.LongTensor(idx_train)
 idx_val = torch.LongTensor(idx_val)
 idx_test = torch.LongTensor(idx_test)
 
+# 模型设置
 model = DGI(ft_size, hid_units, nonlinearity)
 optimiser = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=l2_coef)
 
